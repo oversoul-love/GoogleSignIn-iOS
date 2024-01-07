@@ -56,7 +56,7 @@ NSString* GIDEnvironment(void) {
 
 #if TARGET_OS_MACCATALYST
   appleEnvironment = kAppleEnvironmentMacOSMacCatalyst;
-#elif TARGET_OS_IOS
+#elif TARGET_OS_VISION
 #if TARGET_OS_SIMULATOR
   appleEnvironment = kAppleEnvironmentIOSSimulator;
 #else // TARGET_OS_SIMULATOR

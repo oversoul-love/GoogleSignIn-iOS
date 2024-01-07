@@ -13,7 +13,7 @@
 // limitations under the License.
 #import <TargetConditionals.h>
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_VISION && !TARGET_OS_MACCATALYST
 
 #import "GoogleSignIn/Sources/GIDEMMErrorHandler.h"
 
@@ -107,7 +107,7 @@ typedef enum {
     }
     if (!alertWindow) {
       CGRect keyWindowBounds = CGRectIsEmpty(keyWindow.bounds) ?
-        keyWindow.bounds : [UIScreen mainScreen].bounds;
+        keyWindow.bounds : CGRectMake(0, 0, 400, 300);
       alertWindow = [[UIWindow alloc] initWithFrame:keyWindowBounds];
     }
     alertWindow.backgroundColor = [UIColor clearColor];
@@ -333,4 +333,4 @@ typedef enum {
 
 NS_ASSUME_NONNULL_END
 
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_VISION && !TARGET_OS_MACCATALYST

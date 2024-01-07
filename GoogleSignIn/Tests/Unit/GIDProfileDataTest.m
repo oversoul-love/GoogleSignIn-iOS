@@ -133,7 +133,7 @@ static NSString *const kFIFEAvatarURL2WithDimension =
   }
 }
 
-#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
+#if TARGET_OS_VISION || TARGET_OS_MACCATALYST
 
 // Deprecated in iOS 13 and macOS 10.14
 - (void)testLegacyCoding {
@@ -160,7 +160,7 @@ static NSString *const kFIFEAvatarURL2WithDimension =
                         kFIFEImageURLWithDimension);
 }
 
-#endif // TARGET_OS_IOS || TARGET_OS_MACCATALYST
+#endif // TARGET_OS_VISION || TARGET_OS_MACCATALYST
 
 - (void)testImageURLWithDimension {
   GIDProfileData *profileData;
