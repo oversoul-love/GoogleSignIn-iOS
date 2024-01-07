@@ -744,7 +744,9 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
   if (!authState.lastTokenResponse.accessToken &&
       authState.lastAuthorizationResponse.authorizationCode) {
     tokenRequest = [authState.lastAuthorizationResponse
-        tokenExchangeRequestWithAdditionalParameters:additionalParameters];
+        tokenExchangeRequestWithAdditionalParameters:additionalParameters
+        additionalHeaders:nil
+    ];
   } else {
     [additionalParameters
         addEntriesFromDictionary:authState.lastTokenResponse.request.additionalParameters];
