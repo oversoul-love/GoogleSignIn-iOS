@@ -16,7 +16,7 @@
 
 #import <TargetConditionals.h>
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
@@ -306,4 +306,4 @@ static NSString *const kEMMPasscodeInfoKey = @"emm_passcode_info";
 
 NS_ASSUME_NONNULL_END
 
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
