@@ -15,7 +15,7 @@
  */
 #import <TargetConditionals.h>
 
-#if TARGET_OS_VISION && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
 
 #import <Foundation/Foundation.h>
 
@@ -51,4 +51,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_ASSUME_NONNULL_END
 
-#endif // TARGET_OS_VISION && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST

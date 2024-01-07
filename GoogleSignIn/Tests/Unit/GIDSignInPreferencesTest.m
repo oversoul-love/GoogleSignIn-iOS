@@ -32,7 +32,7 @@
   NSString *expectedEnvironment;
 #if TARGET_OS_MACCATALYST
   expectedEnvironment = @"macos-cat";
-#elif TARGET_OS_VISION
+#elif TARGET_OS_IOS
 #if TARGET_OS_SIMULATOR
   expectedEnvironment = @"ios-sim";
 #else

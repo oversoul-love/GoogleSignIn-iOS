@@ -27,10 +27,10 @@
 #import "GoogleSignIn/Sources/GIDCallbackQueue.h"
 #import "GoogleSignIn/Sources/GIDScopes.h"
 #import "GoogleSignIn/Sources/GIDSignInCallbackSchemes.h"
-#if TARGET_OS_VISION && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
 #import "GoogleSignIn/Sources/GIDAuthStateMigration.h"
 #import "GoogleSignIn/Sources/GIDEMMErrorHandler.h"
-#endif // TARGET_OS_VISION && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
 
 #import "GoogleSignIn/Sources/GIDGoogleUser_Private.h"
 #import "GoogleSignIn/Sources/GIDProfileData_Private.h"
@@ -56,7 +56,7 @@
 #import <AppAuth/OIDURLQueryComponent.h>
 #import <GTMSessionFetcher/GTMSessionFetcher.h>
 
-#if TARGET_OS_VISION || TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
 #import <AppAuth/OIDAuthorizationService+IOS.h>
 #elif TARGET_OS_OSX
 #import <AppAuth/OIDAuthorizationService+Mac.h>
@@ -235,7 +235,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
   return YES;
 }
 
-#if TARGET_OS_VISION || TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
 
 - (void)signInWithPresentingViewController:(UIViewController *)presentingViewController
                                       hint:(nullable NSString *)hint
@@ -478,7 +478,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
                         tokenEndpoint:[NSURL URLWithString:tokenEndpointURL]];
     _keychainStore = keychainStore;
 
-#if TARGET_OS_VISION && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
     // Perform migration of auth state from old (before 5.0) versions of the SDK if needed.
     GIDAuthStateMigration *migration =
         [[GIDAuthStateMigration alloc] initWithKeychainStore:_keychainStore];
@@ -486,7 +486,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
                               callbackPath:kBrowserCallbackPath
                               keychainName:kGTMAppAuthKeychainName
                             isFreshInstall:isFreshInstall];
-#endif // TARGET_OS_VISION && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
   }
   return self;
 }
@@ -563,7 +563,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
                                              [schemes clientIdentifierScheme],
                                              kBrowserCallbackPath]];
   NSString *emmSupport;
-#if TARGET_OS_VISION && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
   emmSupport = [[self class] isOperatingSystemAtLeast9] ? kEMMVersion : nil;
 #elif TARGET_OS_MACCATALYST || TARGET_OS_OSX
   emmSupport = nil;
@@ -581,7 +581,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
     additionalParameters[kHostedDomainParameter] = options.configuration.hostedDomain;
   }
 
-#if TARGET_OS_VISION && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
   [additionalParameters addEntriesFromDictionary:
       [GIDEMMSupport parametersWithParameters:options.extraParams
                                    emmSupport:emmSupport
@@ -602,7 +602,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
 
   _currentAuthorizationFlow = [OIDAuthorizationService
       presentAuthorizationRequest:request
-#if TARGET_OS_VISION || TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
          presentingViewController:options.presentingViewController
 #elif TARGET_OS_OSX
                  presentingWindow:options.presentingWindow
@@ -639,7 +639,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
       GIDSignInErrorCode errorCode = kGIDSignInErrorCodeUnknown;
       NSDictionary<NSString *, NSObject *> *params = authorizationResponse.additionalParameters;
 
-#if TARGET_OS_VISION && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
       if (authFlow.emmSupport) {
         [authFlow wait];
         BOOL isEMMError = [[GIDEMMErrorHandler sharedInstance]
@@ -651,7 +651,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
           errorCode = kGIDSignInErrorCodeEMM;
         }
       }
-#endif // TARGET_OS_VISION && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
       errorString = (NSString *)params[kOAuth2ErrorKeyName];
       if ([errorString isEqualToString:kOAuth2AccessDenied]) {
         errorCode = kGIDSignInErrorCodeCanceled;
@@ -727,7 +727,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
   if (_currentOptions.configuration.openIDRealm) {
     additionalParameters[kOpenIDRealmParameter] = _currentOptions.configuration.openIDRealm;
   }
-#if TARGET_OS_VISION && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
   NSDictionary<NSString *, NSObject *> *params =
       authState.lastAuthorizationResponse.additionalParameters;
   NSString *passcodeInfoRequired = (NSString *)params[kEMMPasscodeInfoRequiredKeyName];
@@ -735,15 +735,15 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
       [GIDEMMSupport parametersWithParameters:@{}
                                    emmSupport:authFlow.emmSupport
                        isPasscodeInfoRequired:passcodeInfoRequired.length > 0]];
-#endif // TARGET_OS_VISION && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
   additionalParameters[kSDKVersionLoggingParameter] = GIDVersion();
   additionalParameters[kEnvironmentLoggingParameter] = GIDEnvironment();
 
   OIDTokenRequest *tokenRequest;
   if (!authState.lastTokenResponse.accessToken &&
       authState.lastAuthorizationResponse.authorizationCode) {
-//    tokenRequest = [authState.lastAuthorizationResponse
-//        tokenExchangeRequestWithAdditionalParameters:additionalParameters];
+    tokenRequest = [authState.lastAuthorizationResponse
+        tokenExchangeRequestWithAdditionalParameters:additionalParameters];
   } else {
     [additionalParameters
         addEntriesFromDictionary:authState.lastTokenResponse.request.additionalParameters];
@@ -758,7 +758,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
     [authState updateWithTokenResponse:tokenResponse error:error];
     authFlow.error = error;
 
-#if TARGET_OS_VISION && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
     if (authFlow.emmSupport) {
       [GIDEMMSupport handleTokenFetchEMMError:error completion:^(NSError *error) {
         authFlow.error = error;
@@ -905,7 +905,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
   if (![@"restart_auth" isEqualToString:actionString]) {
     return NO;
   }
-#if TARGET_OS_VISION || TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
   if (!_currentOptions.presentingViewController) {
     return NO;
   }
@@ -963,7 +963,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
 
 // Assert that the presenting view controller has been set.
 - (void)assertValidPresentingViewController {
-#if TARGET_OS_VISION || TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
   if (!_currentOptions.presentingViewController)
 #elif TARGET_OS_OSX
   if (!_currentOptions.presentingWindow)

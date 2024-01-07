@@ -41,16 +41,14 @@ let package = Package(
     ),
   ],
   dependencies: [
-//    .package(name: "AppAuth", path: "../AppAuth-iOS"),
-    .package(name: "GTMAppAuth", path: "../GTMAppAuth"),
     .package(
       name: "AppAuth",
-      url: "https://github.com/oversoul-love/AppAuth-iOS.git",
-      .branch("kw/visionOS")),
-//    .package(
-//      name: "GTMAppAuth",
-//      url: "https://github.com/google/GTMAppAuth.git",
-//      from: "4.0.0"),
+      url: "https://github.com/openid/AppAuth-iOS.git",
+      "1.6.0" ..< "2.0.0"),
+    .package(
+      name: "GTMAppAuth",
+      url: "https://github.com/google/GTMAppAuth.git",
+      from: "4.0.0"),
     .package(
       name: "GTMSessionFetcher",
       url: "https://github.com/google/gtm-session-fetcher.git",

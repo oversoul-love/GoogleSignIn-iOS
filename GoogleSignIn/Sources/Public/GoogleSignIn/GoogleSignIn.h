@@ -21,6 +21,6 @@
 #import "GIDSignIn.h"
 #import "GIDToken.h"
 #import "GIDSignInResult.h"
-#if TARGET_OS_VISION || TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
 #import "GIDSignInButton.h"
 #endif
