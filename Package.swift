@@ -43,16 +43,16 @@ let package = Package(
   dependencies: [
     .package(
       name: "AppAuth",
-      url: "https://github.com/openid/AppAuth-iOS.git",
-      from: "1.7.3"),
+      url: "https://github.com/oversoul-love/AppAuth-iOS.git",
+      .branch("kw/visionOS")),
     .package(
       name: "AppCheck",
       url: "https://github.com/google/app-check.git",
       "10.19.1" ..< "11.0.0"),
     .package(
       name: "GTMAppAuth",
-      url: "https://github.com/google/GTMAppAuth.git",
-      from: "4.1.1"),
+      url: "https://github.com/oversoul-love/GTMAppAuth.git",
+      .branch("kw/visionOS")),
     .package(
       name: "GTMSessionFetcher",
       url: "https://github.com/google/gtm-session-fetcher.git",
@@ -92,7 +92,7 @@ let package = Package(
         .linkedFramework("LocalAuthentication"),
         .linkedFramework("Security"),
         .linkedFramework("AppKit", .when(platforms: [.macOS])),
-        .linkedFramework("UIKit", .when(platforms: [.iOS])),
+        .linkedFramework("UIKit", .when(platforms: [.iOS, .visionOS])),
       ]
     ),
     .target(
