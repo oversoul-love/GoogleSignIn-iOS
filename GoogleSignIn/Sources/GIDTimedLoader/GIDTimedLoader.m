@@ -16,7 +16,7 @@
 
 #import "GoogleSignIn/Sources/GIDTimedLoader/GIDTimedLoader.h"
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
 
 @import UIKit;
 @import CoreMedia;
@@ -116,4 +116,4 @@ CFTimeInterval const kGIDTimedLoaderMaxDelayBeforeAnimating = 0.8;
 
 @end
 
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION

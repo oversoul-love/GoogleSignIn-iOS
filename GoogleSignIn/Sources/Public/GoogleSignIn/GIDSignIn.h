@@ -66,7 +66,7 @@ typedef NS_ERROR_ENUM(kGIDSignInErrorDomain, GIDSignInErrorCode) {
 /// The active configuration for this instance of `GIDSignIn`.
 @property(nonatomic, nullable) GIDConfiguration *configuration;
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
 
 /// Configures `GIDSignIn` for use.
 ///
@@ -93,7 +93,7 @@ NS_SWIFT_NAME(configure(completion:));
 API_AVAILABLE(ios(14))
 NS_SWIFT_NAME(configureDebugProvider(withAPIKey:completion:));
 
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
 
 /// Unavailable. Use the `sharedInstance` property to instantiate `GIDSignIn`.
 /// :nodoc:

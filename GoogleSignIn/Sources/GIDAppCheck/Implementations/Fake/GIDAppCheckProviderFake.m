@@ -14,7 +14,7 @@
 
 #import "GoogleSignIn/Sources/GIDAppCheck/Implementations/Fake/GIDAppCheckProviderFake.h"
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
 
 #import <AppCheckCore/GACAppCheckToken.h>
 
@@ -53,4 +53,4 @@ NSUInteger const kGIDAppCheckProviderFakeError = 1;
 
 @end
 
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION

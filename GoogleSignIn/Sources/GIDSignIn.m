@@ -170,9 +170,9 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
   // set when a sign-in flow is begun via |signInWithOptions:| when the options passed don't
   // represent a sign in continuation.
   GIDSignInInternalOptions *_currentOptions;
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
   GIDAppCheck *_appCheck API_AVAILABLE(ios(14));
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
   // AppAuth configuration object.
   OIDServiceConfiguration *_appAuthConfiguration;
   // AppAuth external user-agent session state.
@@ -181,12 +181,12 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
   BOOL _restarting;
   // Keychain manager for GTMAppAuth
   GTMKeychainStore *_keychainStore;
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
   // The class used to manage presenting the loading screen for fetching app check tokens.
   GIDTimedLoader *_timedLoader;
   // Flag indicating developer's intent to use App Check.
   BOOL _configureAppCheckCalled;
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
 }
 
 #pragma mark - Public methods
@@ -465,13 +465,13 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
   dispatch_once(&once, ^{
     GTMKeychainStore *keychainStore =
         [[GTMKeychainStore alloc] initWithItemName:kGTMAppAuthKeychainName];
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
     if (@available(iOS 14.0, *)) {
       GIDAppCheck *appCheck = [GIDAppCheck appCheckUsingAppAttestProvider];
       sharedInstance = [[self alloc] initWithKeychainStore:keychainStore
                                                   appCheck:appCheck];
     }
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
     if (!sharedInstance) {
       sharedInstance = [[self alloc] initWithKeychainStore:keychainStore];
     }
@@ -481,7 +481,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
 
 #pragma mark - Configuring and pre-warming
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
 - (void)configureWithCompletion:(nullable void (^)(NSError * _Nullable))completion {
   @synchronized(self) {
     _configureAppCheckCalled = YES;
@@ -504,7 +504,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
     }];
   }
 }
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
 
 #pragma mark - Private methods
 
@@ -548,7 +548,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
   return self;
 }
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
 - (instancetype)initWithKeychainStore:(GTMKeychainStore *)keychainStore
                              appCheck:(GIDAppCheck *)appCheck {
   self = [self initWithKeychainStore:keychainStore];
@@ -558,7 +558,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
   }
   return self;
 }
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
 
 // Does sanity check for parameters and then authenticates if necessary.
 - (void)signInWithOptions:(GIDSignInInternalOptions *)options {
@@ -632,7 +632,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
                                           NSError * _Nullable error) {
     self->_currentAuthorizationFlow =
         [OIDAuthorizationService presentAuthorizationRequest:request
-#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_VISION
                                     presentingViewController:options.presentingViewController
 #elif TARGET_OS_OSX
                                        presentingWindow:options.presentingWindow
@@ -652,7 +652,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
   BOOL shouldCreateAuthRequest = YES;
   NSMutableDictionary<NSString *, NSString *> *additionalParameters =
       [self additionalParametersFromOptions:options];
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
   if (@available(iOS 14.0, *)) {
     // Only use `_appCheck` (created via singleton `+[GIDSignIn sharedInstance]` call) if
     // `GIDAppCheck` has been successfully prepared OR if the developer has attempted to configure.
@@ -690,7 +690,7 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
       }];
     }
   }
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
   if (shouldCreateAuthRequest) {
     OIDAuthorizationRequest *request = [self authorizationRequestWithOptions:options
                                                         additionalParameters:additionalParameters];
@@ -715,11 +715,11 @@ static NSString *const kConfigOpenIDRealmKey = @"GIDOpenIDRealm";
 - (NSMutableDictionary<NSString *, NSString *> *)
     additionalParametersFromOptions:(GIDSignInInternalOptions *)options {
   NSString *emmSupport;
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
   emmSupport = [[self class] isOperatingSystemAtLeast9] ? kEMMVersion : nil;
-#elif TARGET_OS_MACCATALYST || TARGET_OS_OSX
+#elif TARGET_OS_VISION || TARGET_OS_OSX
   emmSupport = nil;
-#endif // TARGET_OS_MACCATALYST || TARGET_OS_OSX
+#endif // TARGET_OS_VISION || TARGET_OS_OSX
 
   NSMutableDictionary<NSString *, NSString *> *additionalParameters =
       [[NSMutableDictionary alloc] init];

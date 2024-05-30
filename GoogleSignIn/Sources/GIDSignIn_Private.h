@@ -48,12 +48,12 @@ typedef void (^GIDDisconnectCompletion)(NSError *_Nullable error);
 /// Private initializer taking a `GTMKeychainStore`.
 - (instancetype)initWithKeychainStore:(GTMKeychainStore *)keychainStore;
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
 /// Private initializer taking a `GTMKeychainStore` and `GIDAppCheckProvider`.
 - (instancetype)initWithKeychainStore:(GTMKeychainStore *)keychainStore
                              appCheck:(GIDAppCheck *)appCheck
 API_AVAILABLE(ios(14));
-#endif // TARGET_OS_IOS || !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS || !TARGET_OS_VISION
 
 /// Authenticates with extra options.
 - (void)signInWithOptions:(GIDSignInInternalOptions *)options;

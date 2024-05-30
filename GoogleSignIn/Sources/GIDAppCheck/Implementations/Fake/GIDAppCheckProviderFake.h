@@ -15,7 +15,7 @@
 #import <TargetConditionals.h>
 #import <Foundation/Foundation.h>
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
 #import <AppCheckCore/GACAppCheckProvider.h>
 
 @class GACAppCheckToken;
@@ -42,4 +42,4 @@ NS_CLASS_AVAILABLE_IOS(14)
 
 NS_ASSUME_NONNULL_END
 
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION

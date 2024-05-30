@@ -268,10 +268,10 @@ static NSString *const kNewScope = @"newScope";
   // Status returned by saveAuthorization:toKeychainForName:
   BOOL _saveAuthorizationReturnValue;
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
   // Test userDefaults for use with `GIDAppCheck`
   NSUserDefaults *_testUserDefaults;
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
 }
 @end
 
@@ -341,9 +341,9 @@ static NSString *const kNewScope = @"newScope";
   _signIn = [[GIDSignIn alloc] initWithKeychainStore:_keychainStore];
   _hint = nil;
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
   _testUserDefaults = [[NSUserDefaults alloc] initWithSuiteName:kUserDefaultsSuiteName];
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
 
   __weak GIDSignInTest *weakSelf = self;
   _completion = ^(GIDSignInResult *_Nullable signInResult, NSError * _Nullable error) {
@@ -372,10 +372,10 @@ static NSString *const kNewScope = @"newScope";
 #endif // TARGET_OS_IOS || TARGET_OS_VISION
 
   [[NSUserDefaults standardUserDefaults] removeObjectForKey:kAppHasRunBeforeKey];
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
   [_testUserDefaults removeObjectForKey:kGIDAppCheckPreparedKey];
   [_testUserDefaults removeSuiteNamed:kUserDefaultsSuiteName];
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
 
   [_fakeMainBundle stopFaking];
   [super tearDown];
@@ -383,7 +383,7 @@ static NSString *const kNewScope = @"newScope";
 
 #pragma mark - Tests
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
 - (void)testConfigureSucceeds {
   if (@available(iOS 14, *)) {
     XCTestExpectation *configureSucceedsExpecation =
@@ -433,7 +433,7 @@ static NSString *const kNewScope = @"newScope";
     XCTAssertFalse(appCheck.isPrepared);
   }
 }
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
 
 - (void)testInitWithKeychainStore {
   GTMKeychainStore *store = [[GTMKeychainStore alloc] initWithItemName:@"foo"];

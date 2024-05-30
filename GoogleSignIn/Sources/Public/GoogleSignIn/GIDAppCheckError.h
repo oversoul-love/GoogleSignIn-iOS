@@ -16,7 +16,7 @@
 
 #import <TargetConditionals.h>
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
 
 #import <Foundation/Foundation.h>
 
@@ -32,4 +32,4 @@ typedef NS_ERROR_ENUM(kGIDAppCheckErrorDomain, GIDAppCheckErrorCode) {
 };
 NS_ASSUME_NONNULL_END
 
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
