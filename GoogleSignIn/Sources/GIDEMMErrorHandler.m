@@ -13,7 +13,7 @@
 // limitations under the License.
 #import <TargetConditionals.h>
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
 
 #import "GoogleSignIn/Sources/GIDEMMErrorHandler.h"
 
@@ -333,4 +333,4 @@ typedef enum {
 
 NS_ASSUME_NONNULL_END
 
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION

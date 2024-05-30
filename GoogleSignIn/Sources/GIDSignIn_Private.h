@@ -66,7 +66,7 @@ API_AVAILABLE(ios(14));
 /// @return NO if there is no user restored from the keychain.
 - (BOOL)restorePreviousSignInNoRefresh;
 
-#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_VISION
 
 /// Starts an interactive consent flow on iOS to add scopes to the current user's grants.
 ///

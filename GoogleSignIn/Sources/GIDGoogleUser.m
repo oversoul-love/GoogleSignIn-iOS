@@ -53,13 +53,13 @@ static NSString *const kEMMSupportParameterName = @"emm_support";
 // Minimal time interval before expiration for the access token or it needs to be refreshed.
 static NSTimeInterval const kMinimalTimeToExpire = 60.0;
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
 @interface GIDGoogleUser ()
 
 @property (nonatomic, strong) id<GTMAuthSessionDelegate> authSessionDelegate;
 
 @end
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
 
 @implementation GIDGoogleUser {
   GIDConfiguration *_cachedConfiguration;
@@ -135,14 +135,14 @@ static NSTimeInterval const kMinimalTimeToExpire = 60.0;
   }
   // This is the first handler in the queue, a fetch is needed.
   NSMutableDictionary *additionalParameters = [@{} mutableCopy];
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
   [additionalParameters addEntriesFromDictionary:
       [GIDEMMSupport updatedEMMParametersWithParameters:
           self.authState.lastTokenResponse.request.additionalParameters]];
-#elif TARGET_OS_OSX || TARGET_OS_MACCATALYST
+#elif TARGET_OS_OSX || TARGET_OS_VISION
   [additionalParameters addEntriesFromDictionary:
       self.authState.lastTokenResponse.request.additionalParameters];
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
   additionalParameters[kSDKVersionLoggingParameter] = GIDVersion();
   additionalParameters[kEnvironmentLoggingParameter] = GIDEnvironment();
 
@@ -159,7 +159,7 @@ static NSTimeInterval const kMinimalTimeToExpire = 60.0;
         [self.authState updateWithAuthorizationError:error];
       }
     }
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
     [GIDEMMSupport handleTokenFetchEMMError:error completion:^(NSError *_Nullable error) {
       // Process the handler queue to call back.
       NSArray<GIDGoogleUserCompletion> *refreshTokensHandlerQueue;
@@ -173,7 +173,7 @@ static NSTimeInterval const kMinimalTimeToExpire = 60.0;
         });
       }
     }];
-#elif TARGET_OS_OSX || TARGET_OS_MACCATALYST
+#elif TARGET_OS_OSX || TARGET_OS_VISION
     NSArray<GIDGoogleUserCompletion> *refreshTokensHandlerQueue;
     @synchronized(self->_tokenRefreshHandlerQueue) {
       refreshTokensHandlerQueue = [self->_tokenRefreshHandlerQueue copy];
@@ -184,7 +184,7 @@ static NSTimeInterval const kMinimalTimeToExpire = 60.0;
         completion(error ? nil : self, error);
       });
     }
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
   }];
 }
 
@@ -193,11 +193,11 @@ static NSTimeInterval const kMinimalTimeToExpire = 60.0;
 }
 
 - (void)addScopes:(NSArray<NSString *> *)scopes
-#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_VISION
     presentingViewController:(UIViewController *)presentingViewController
 #elif TARGET_OS_OSX
             presentingWindow:(NSWindow *)presentingWindow
-#endif // TARGET_OS_IOS || TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS || TARGET_OS_VISION
                   completion:(nullable void (^)(GIDSignInResult *_Nullable signInResult,
                                                 NSError *_Nullable error))completion {
   if (self != GIDSignIn.sharedInstance.currentUser) {
@@ -213,22 +213,22 @@ static NSTimeInterval const kMinimalTimeToExpire = 60.0;
   }
   
   [GIDSignIn.sharedInstance addScopes:scopes
-#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_VISION
              presentingViewController:presentingViewController
 #elif TARGET_OS_OSX
                      presentingWindow:presentingWindow
-#endif // TARGET_OS_IOS || TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS || TARGET_OS_VISION
                            completion:completion];
 }
 
 #pragma mark - Private Methods
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
 - (nullable NSString *)emmSupport {
   return self.authState.lastAuthorizationResponse
       .request.additionalParameters[kEMMSupportParameterName];
 }
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
 
 - (instancetype)initWithAuthState:(OIDAuthState *)authState
                       profileData:(nullable GIDProfileData *)profileData {
@@ -238,10 +238,10 @@ static NSTimeInterval const kMinimalTimeToExpire = 60.0;
     _profile = profileData;
     
     GTMAuthSession *authSession = [[GTMAuthSession alloc] initWithAuthState:authState];
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS && !TARGET_OS_VISION
     _authSessionDelegate = [[GIDEMMSupport alloc] init];
     authSession.delegate = _authSessionDelegate;
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS && !TARGET_OS_VISION
     authSession.authState.stateChangeDelegate = self;
     _fetcherAuthorizer = authSession;
     

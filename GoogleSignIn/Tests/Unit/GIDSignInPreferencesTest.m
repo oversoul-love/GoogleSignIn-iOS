@@ -30,7 +30,7 @@
   NSString *environment = GIDEnvironment();
 
   NSString *expectedEnvironment;
-#if TARGET_OS_MACCATALYST
+#if TARGET_OS_VISION
   expectedEnvironment = @"macos-cat";
 #elif TARGET_OS_IOS
 #if TARGET_OS_SIMULATOR
@@ -40,7 +40,7 @@
 #endif // TARGET_OS_SIMULATOR
 #elif TARGET_OS_OSX
   expectedEnvironment = @"macos";
-#endif // TARGET_OS_MACCATALYST
+#endif // TARGET_OS_VISION
   XCTAssertEqualObjects(environment, expectedEnvironment);
 }
 
